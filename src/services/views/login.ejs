@@ -1,0 +1,31 @@
+<html>
+    <%- include('head.ejs') %>
+    <body>
+        <div class="text-center mt-5">
+            <form style="max-width: 300px; margin:auto;" method="post">
+                <img class="mt-4 mb-4" src="<%= icon %>" height="72" alt="CSIS Logo" />
+                <h1 class="h2 mb-3 font-weight-normal"><%= name%> Administrator Access</h1>
+
+                <label for="username" class="visually-hidden"">Username</label>
+                <input type=" text" id="username" name="username" class="form-control" placeholder="Username" required
+                    autofocus />
+
+                <div class="mt-1">
+                    <label for="password" class="visually-hidden"">Password</label>
+                    <input type=" password" id="password" name="password" class="form-control" placeholder="Password"
+                        required autofocus />
+                </div>
+
+                <div class="mt-3 d-grid gap-2">
+                    <button class="btn btn-lg btn-primary btn-full">Login</button>
+                    <% if(locals.error){ %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= error %>
+                        </div>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </body>
+
+</html>
