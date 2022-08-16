@@ -12,7 +12,7 @@ export interface Database {
 export class DatabaseService extends Service<Database> {
     name = "Database";
     version = "1.0.0";
-    priority = 1000; //Load the database service last (assuming we have 1k services)
+    priority = -1; //Load the database service first.
 
     static singleton: DatabaseService | null = null;
     static getInstance() {

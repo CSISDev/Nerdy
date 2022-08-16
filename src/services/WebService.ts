@@ -1,4 +1,4 @@
-import { Service } from "../ServiceManager";
+import { IPlugin, Service } from "../ServiceManager";
 import { hasMethod } from "../helpers/Helpers";
 
 import express from "express"
@@ -133,13 +133,13 @@ export class WebService extends Service<Web>{
      * Hook - Called when a plugin is hooked into a service
      * @param plugin 
      */
-    async hook(plugin: Web) {
+    async hook(plugin: IPlugin<Web>) {
         //Check if said instance of the plugin implements said method
         if (hasMethod(plugin.setupWebRoutes)) {
 
             //Get route
             const get: WebRoute = (route: string, event: WebEvent) => {
-                console.log('adding route: ' + `/plugins/${plugin.constructor.name}/${route}`)
+
                 this.app.get(`/plugins/${plugin.constructor.name}/${route}`, (req, res) => {
                     //provide a render fuction to render the contents of a view relative to the plugins folder
                     const render: WebRender = (view: string) => {
@@ -163,7 +163,6 @@ export class WebService extends Service<Web>{
 
             //Now call the setupWebRoutes in each plugin
             plugin.setupWebRoutes(get, post)
-
         }
     }
 }

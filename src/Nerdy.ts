@@ -27,8 +27,8 @@ const pluginManager = new PluginManager;
 const serviceManager = new ServiceManager;
 
 //Provide the logging namespace for them
-serviceManager.setLoggerNamespace("Nerdy:ServiceManager:")
-pluginManager.setLoggerNamespace("Nerdy:PluginManager:")
+serviceManager.setLoggerNamespace("Nerdy:ServiceManager")
+pluginManager.setLoggerNamespace("Nerdy:PluginManager")
 
 //Import all of the Services
 import { DiscordService } from "./services/DiscordService";

@@ -12,24 +12,29 @@
  * @license MIT
  */
 
+import { CacheType, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Plugin } from "../PluginManager";
 import { Discord } from "../services/DiscordService";
 import { Web, WebRoute } from "../services/WebService";
 
-export class ActiveMember extends Plugin implements Discord,Web {
+export class ActiveMember extends Plugin implements Discord, Web {
     name = "Active Member";
     version = "1.0.0"
 
-    onCommand() {
-        this.log("on command!")
+    async onCommand(name: string, interaction: ChatInputCommandInteraction<CacheType>) {
+        if (name === "ping") {
+            await interaction.reply({ content: 'Pong!', ephemeral: true });
+        }
     }
-    onInteraction() {
-
+    createCommandInteraction(): SlashCommandBuilder[] {
+        return [
+            new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
+            new SlashCommandBuilder().setName('pong').setDescription('Replies with ping!')
+        ]
     }
-    setupWebRoutes(get: WebRoute,post: WebRoute) {
+    setupWebRoutes(get: WebRoute, post: WebRoute) {
         get("", (render,query,body) => {
             render("home")
-            console.log(query)
         })
     }
 }

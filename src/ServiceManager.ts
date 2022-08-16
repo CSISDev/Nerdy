@@ -3,11 +3,7 @@ import { Plugin } from "./PluginManager";
 
 
 
-export interface ServiceHandler<T,Z> {
-    service: T,
-    handler: Z
-}
-
+export type IPlugin<T> = Plugin & T
 
 /**
  * Service - A component of the main bot which provides a generic T
@@ -18,7 +14,7 @@ export abstract class Service<T> {
     abstract version: string;
     abstract priority: number;
 
-    abstract hook(plugin: T): void
+    abstract hook(plugin: IPlugin<T>): void
     abstract start(): void
 
     constructor() {
