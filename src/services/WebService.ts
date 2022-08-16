@@ -48,6 +48,8 @@ export class WebService extends Service<Web>{
         return this.singleton
     }
 
+    plugins: IPlugin<Web>[] = []
+
     /**
      * start - Service Start 
      */
@@ -85,12 +87,22 @@ export class WebService extends Service<Web>{
             //Is the user logged in?
             if (session.user) {
                 //If so render the home page (dashboard)
-                res.render("dashboard", { username: session.user, icon: process.env.WEB_ICON_URL ?? this.defaultIcon, name: process.env.NAME ?? 'Nerdy' })
+                res.render("dashboard", { username: session.user, icon: process.env.WEB_ICON_URL ?? this.defaultIcon, name: process.env.NAME ?? 'Nerdy', plugins: this.plugins })
             } else {
                 //If they are not logged in then show them the login screen
                 res.render("login", { icon: process.env.WEB_ICON_URL ?? this.defaultIcon, name: process.env.NAME ?? 'Nerdy' })
             }
         })
+
+        this.app.get("/home", (req, res) => {
+            const session = req.session
+
+            //Is the user logged in?
+            if (session.user) {
+                res.render("home", { username: session.user, icon: process.env.WEB_ICON_URL ?? this.defaultIcon, name: process.env.NAME ?? 'Nerdy', plugins: this.plugins })
+            }
+        })
+
 
         this.app.post("/", (req, res) => {
             //By default we assume they can't login
@@ -163,6 +175,7 @@ export class WebService extends Service<Web>{
 
             //Now call the setupWebRoutes in each plugin
             plugin.setupWebRoutes(get, post)
+            this.plugins.push(plugin)
         }
     }
 }
