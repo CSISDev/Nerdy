@@ -16,14 +16,13 @@ import { CacheType, ChatInputCommandInteraction, SlashCommandBuilder } from "dis
 import { DataTypes, Sequelize } from "sequelize";
 import { Plugin } from "../PluginManager";
 import { Database, DatabaseModelList, ICreateModel } from "../services/DatabaseService";
-import { Discord } from "../services/DiscordService";
+import { Discord, SlashCommand } from "../services/DiscordService";
 import { Web, WebRoute } from "../services/WebService";
 
 
 export class ActiveMember extends Plugin implements Discord, Web, Database {
     name = "Active Member";
     version = "1.0.0"
-
 
     models: DatabaseModelList = {};
 
@@ -35,13 +34,11 @@ export class ActiveMember extends Plugin implements Discord, Web, Database {
     }
 
 
-    createCommandInteraction(): SlashCommandBuilder[] {
+    createCommandInteraction(): SlashCommand[] {
         return [
-            new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
-            new SlashCommandBuilder().setName('pong').setDescription('Replies with ping!')
+            new SlashCommandBuilder().setName('activity').setDescription('View activity information')
         ]
     }
-
 
     setupWebRoutes(get: WebRoute, post: WebRoute) {
         get("", async (render, query, body) => {
@@ -53,18 +50,7 @@ export class ActiveMember extends Plugin implements Discord, Web, Database {
             render("home")
         })
     }
-    loadModels(createModel: ICreateModel): void {
-        this.models.User = createModel('User', {
-            // Model attributes are defined here
-            firstName: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            lastName: {
-                type: DataTypes.STRING
-                // allowNull defaults to true
-            }
-        });
-        this.models.User.sync()
+    createModel(pool: ICreateModel): void {
+        
     }
 }

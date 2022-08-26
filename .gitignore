@@ -3,5 +3,5 @@ node_modules/
 rfcs/
 
 .env
-
 db.sqlite
+yarn-error.log

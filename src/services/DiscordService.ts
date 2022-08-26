@@ -1,7 +1,7 @@
 import { hasMethod } from "../helpers/Helpers";
 import { IPlugin, Service } from "../ServiceManager";
 
-import { CacheType, ChatInputCommandInteraction, Client, Interaction, Routes, SlashCommandBuilder } from "discord.js";
+import { CacheType, ChatInputCommandInteraction, Client, IntentsBitField, Interaction, Routes, SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from "discord.js";
 import { REST } from "discord.js";
 import { Plugin } from "../PluginManager";
 
@@ -18,9 +18,11 @@ interface IPlugins<T> {
     [plugin: string]: T
 }
 
+export type SlashCommand = SlashCommandSubcommandsOnlyBuilder | SlashCommandBuilder
+
 export interface Discord {
     onCommand(name: string, interaction: ChatInputCommandInteraction<CacheType>) : void,
-    createCommandInteraction(): SlashCommandBuilder[]
+    createCommandInteraction(): SlashCommand[]
 }
 
 export class DiscordService extends Service<Discord> {
@@ -45,7 +47,7 @@ export class DiscordService extends Service<Discord> {
     async start() {
         this.log(`Starting ${this.name}`)
         this.client = new Client({
-            intents: []
+            intents: [IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.Guilds]
         });
 
         //Discord ready event, fired once bot is logged in
@@ -77,7 +79,7 @@ export class DiscordService extends Service<Discord> {
         this.client.login(process.env.BOT_TOKEN)
     }
     async createCommandInteraction(rest: REST) {
-        let commands: SlashCommandBuilder[] = []
+        let commands: SlashCommand[] = []
         //List of used commands based on string name
         let usedCommands: string[] = []
 
@@ -121,7 +123,6 @@ export class DiscordService extends Service<Discord> {
             }
 
         }
-        
         //Convert the list of commands to json 
         const commandsJson = commands.map(command => command.toJSON())
 

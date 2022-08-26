@@ -12,7 +12,8 @@ export interface DatabaseModelList {
 }
 
 export interface Database {
-    loadModels(createModel: ICreateModel): void
+    createModel(createModel: ICreateModel): void
+    models: DatabaseModelList | null
 }
 
 /**
@@ -42,16 +43,16 @@ export class DatabaseService extends Service<Database> {
         });
         for (const plugin of this.plugins) {
             const createModel: ICreateModel = (name: string, schema: ModelAttributes<Model<any, any>, any>) => {
-                return this.sequelize!.define(`${plugin.constructor.name}${name}`, schema, {
+                return this.sequelize!.define(`${plugin.constructor.name}_${name}`, schema, {
                     // Other model options go here
                 });
             }
-            plugin.loadModels(createModel)
+            plugin.createModel(createModel)
         }
     }
 
     async hook(plugin: IPlugin<Database>) {
-        if (hasMethod(plugin.loadModels)) {
+        if (hasMethod(plugin.createModel)) {
             this.plugins.push(plugin)
         }
     }

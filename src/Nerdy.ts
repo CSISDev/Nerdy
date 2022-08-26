@@ -42,9 +42,11 @@ serviceManager.add(DatabaseService.getInstance());
 
 //Import the plugins
 import { ActiveMember } from "./plugins/ActiveMember.plugin";
+import { ClassCourseManager } from "./plugins/ClassCourseManager.plugin";
 
 //Now add the plugins to the plugin manager
 pluginManager.add(new ActiveMember());
+pluginManager.add(new ClassCourseManager())
 
 //Hook the service manager into the plugins (and call hooks aka a pre load)
 pluginManager.hookIntoServiceManager(serviceManager)
