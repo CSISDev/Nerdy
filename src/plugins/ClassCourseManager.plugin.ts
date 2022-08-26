@@ -360,8 +360,7 @@ export class ClassCourseManager extends Plugin implements Discord, Web, Database
             await this.listSections(interaction, false)
         }
     }
-
-
+    
     createCommandInteraction(): SlashCommand[] {
         return [
             new SlashCommandBuilder()
@@ -399,11 +398,7 @@ export class ClassCourseManager extends Plugin implements Discord, Web, Database
 
     setupWebRoutes(get: WebRoute, post: WebRoute) {
         get("", async (render, query, body) => {
-            /*const user = this.models.User.build({firstName: "Bob", lastName: "Smith"})
-            await user.save();            
- 
-            const users = await this.models.User.findAll();
-            console.log(users)*/
+            
             render("home")
         })
     }

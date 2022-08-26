@@ -27,6 +27,7 @@
     "express-session": "^1.17.3",
     "fetch-cookie": "^2.1.0",
     "jssoup": "^0.0.15",
+    "mariadb": "^3.0.1",
     "node-fetch": "2.6.7",
     "sequelize": "^6.21.3",
     "sqlite3": "^5.0.11"

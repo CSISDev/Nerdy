@@ -1,7 +1,7 @@
 import { Model, ModelAttributes, ModelCtor, Sequelize } from "sequelize";
 import { hasMethod } from "../helpers/Helpers";
 import { IPlugin, Service } from "../ServiceManager";
-
+import mariadb from "mariadb"
 
 
 
@@ -37,10 +37,32 @@ export class DatabaseService extends Service<Database> {
 
     async start() {
         this.log(`Starting ${this.name}`)
-        this.sequelize = new Sequelize({
-            dialect: 'sqlite',
-            storage: 'db.sqlite'
-        });
+
+        //Create the database if a mariadb database is used (recommeneded)
+        if (process.env.DATABASE_URI != null && process.env.DATABASE_URI.includes("mariadb://")) {
+            const pool = mariadb.createPool({host: process.env.DATABASE_HOST, user: process.env.DATABASE_USER, connectionLimit: 5});
+
+            let conn;
+            try {
+                conn = await pool.getConnection();
+                await conn.query("CREATE DATABASE IF NOT EXISTS bot");
+            } finally {
+                if (conn) await conn.release(); //release to pool
+                
+            }
+            await pool.end()
+        }
+        
+        if(process.env.DATABASE_URI) {
+            console.log({uri: process.env.DATABASE_URI})
+            this.sequelize = new Sequelize(process.env.DATABASE_URI);
+        } else {
+            this.sequelize = new Sequelize({
+                dialect: "sqlite",
+                database: "db.sqlite"
+            });
+        }
+        
         for (const plugin of this.plugins) {
             const createModel: ICreateModel = (name: string, schema: ModelAttributes<Model<any, any>, any>) => {
                 return this.sequelize!.define(`${plugin.constructor.name}_${name}`, schema, {

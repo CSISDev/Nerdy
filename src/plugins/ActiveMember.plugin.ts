@@ -50,7 +50,7 @@ export class ActiveMember extends Plugin implements Discord, Web, Database {
             render("home")
         })
     }
-    createModel(pool: ICreateModel): void {
+    createModel(createModel: ICreateModel): void {
         
     }
 }
