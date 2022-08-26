@@ -3,10 +3,9 @@
 Multi-purpose Discord bot for unqiue guild mangement and features built for the unoffical SVSU Computer Science and Information Systems Discord Server.  
 
 ## Plugins 
-- [ ] Course Channel Management
-    - [ ] Channel Cloning
-    - [ ] Role Binding
-    - [ ] Room Binding 
+- [X] Course Channel Management
+    - [X] Channel Cloning
+    - [X] Room Binding 
 - [ ] SVSU Calendar with Notifications
 - [ ] Active Member Status 
     
