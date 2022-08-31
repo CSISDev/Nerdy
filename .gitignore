@@ -5,3 +5,6 @@ rfcs/
 .env
 db.sqlite
 yarn-error.log
+
+
+.vscode/
